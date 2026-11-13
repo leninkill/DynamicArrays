@@ -32,10 +32,14 @@ void deleteElementArray(int *pA, int *n, int nElement) {
     }
 }
 
-void insertElementArray(int *&pA, int *n, int nElement, int *size, int Element) {
+void insertElementArray(int *&pA, int *n, int nElement, int *size, int element) {
     if (nElement <= *size) { // будем вставлять или в сам массив, или в его конец,
         // так как значение передают только одно (если хотят вставить элемент №100 в массив из 5-ти элементов,
         // то нам непонятно, чем инициализировать все элементы между 5-м и 99-м).
+
+        if ((*n) < (*size)) { // проверяем что в массиве есть место
+            
+        }
 
     }
 }
