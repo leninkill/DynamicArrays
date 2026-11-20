@@ -2,7 +2,8 @@
 
 using namespace std;
 
-void createArray(int *&pA, int *n) { // int *&pA это передача адреса по ссылке, нужна, чтобы менять адрес
+void createArray(int *&pA, int *n) {
+    // int *&pA это передача адреса по ссылке, нужна, чтобы менять адрес
     cout << "Type count of elements in array: " << endl;
     cin >> *n;
 
@@ -33,33 +34,44 @@ void deleteElementArray(int *pA, int *n, int nElement) {
 }
 
 void insertElementArray(int *&pA, int *n, int nElement, int *size, int element) {
-    if (nElement <= *size) { // будем вставлять или в сам массив, или в его конец,
+    if (nElement <= *size) {
+        // будем вставлять или в сам массив, или в его конец,
         // так как значение передают только одно (если хотят вставить элемент №100 в массив из 5-ти элементов,
         // то нам непонятно, чем инициализировать все элементы между 5-м и 99-м).
 
-        if ((*n) < (*size)) { // проверяем что в массиве есть место
-            
+        if ((*n) < (*size)) {
+            // проверяем что в массиве есть место
+            for (int i = (*n) - 1; i > nElement; i--) {
+                pA[i + 1] = pA[i];
+            }
+
+            pA[nElement] = element;
+        } else {
+            (*size)++;
+
+            int *pACopy = new int[*size];
+            for (int i = 0; i < nElement; i++) {
+                pACopy[i] = pA[i];
+            }
+
+            pACopy[nElement] = element;
+
+            for (int i = nElement + 1; i < *size; i++) {
+                pACopy[i] = pA[i - 1];
+            }
+
+            delete[] pA;
+            pA = pACopy;
         }
 
+        (*n)++;
     }
 }
 
 int main() {
-    float *a = new float;
-
-    *a = 10;
-
-    cout << *a << endl;
-
-    delete a;
-    // a = nullptr;
-    cout << *a << endl;
-
     int n; // длина массива, которая будет изменяться при добавлении и удалении элемента
-
     int size; // размер памяти выделенной под массив, при удалении элементов не уменьшится
-
-    int *pA; //
+    int *pA;
 
     createArray(pA, &n);
 
@@ -69,8 +81,14 @@ int main() {
 
     for (int i = 0; i < n; i++) {
         if (pA[i] % 2 == 1) {
-            deleteElementArray(pA, &n, i);
-            i--; // чтобы не проскачить элемент после удаленного, ведь он встал на место i-ого элемента и его тоже нужно проверить на нечетность
+            // deleteElementArray(pA, &n, i); // удаляем все элементы с нечетным контентом
+
+            insertElementArray(pA, &n, i + 1, &size, 1);
+            i++; // перескакиваем через один элемент
+
+            // i--
+            // чтобы не проскачить элемент после удаленного, ведь он встал на место i-ого элемента и
+            // его тоже нужно проверить на нечетность
         }
     }
 
